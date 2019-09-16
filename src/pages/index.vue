@@ -87,7 +87,9 @@
 			<div class="box1">
 				<ul>
 					<li class="liebiao" v-for="(item,index) in videoList" :key="index" :id="item.Id">
-						<div class="liebiao-left">
+						<div 
+					
+						class="liebiao-left">
 							<img :src="item.ImgUrl" alt="" />
 						</div>
 						<div class="liebiao-right">
@@ -264,6 +266,10 @@ import {getHomeTravelStrategy} from "@/api/Home"
 			// },
 			// toxiangqing(id){
 			// 	this.$router.push({name:'chanpinxiangqing',params:{type:id}})
+			// },
+			//根据视频id，跳到bofang页面进行观看
+			// bofang(id){
+			// 	this.$router.push({name:"bofang",params:{type:id}})
 			// },
 			godao(){
 				this.$router.push("/dao")

@@ -1,7 +1,7 @@
 <template>
 	<div class="body">
 		<div class="header">
-			<van-nav-bar title="产品详情" left-text="返回" left-arrow @click-left="onClickLeft" />
+			<van-nav-bar title="产品详情" left-text="返回" left-arrow @click-left="onClickLeft($route.params.type)" />
 		</div>
 		<div class="tu">
 			<van-swipe style="width: 100%; height: 100%; overflow: hidden;" :autoplay="2000">
@@ -111,17 +111,29 @@
 				this.getproductdetail()
 		
 			},
-			beforeRouteEnter(to, from, next) {
-			if (from.path == "/yuyue") {
-					to.meta.isBack = true;
-				} else {
-					to.meta.isBack = false;
+			// beforeRouteEnter(to, from, next) {
+			// if (from.path == "/yuyue") {
+			// 		to.meta.isBack = true;
+			// 	} else {
+			// 		to.meta.isBack = false;
 				
-				}
-				next();
+			// 	}
+			// 	next();
+			// },
+		watch:{
 			},
-			watch:{
-			},
+		// beforeRouteLeave(to,from,next){
+		// 	if(to.path == "/index"){
+		// 		to.meta.keepAlive = false;
+		// 	}else if(to.path == "/liebiao"){
+		// 		to.meta.keepAlive = true;
+		// 		to.meta.isBack = true
+		// 	}else{
+		// 		to.meta.keepAlive = false;
+		// 	}
+			
+		// 	next()
+		// },
 			methods: {
 				goyuyue(){
 					this.$router.push("/yuyue")
@@ -136,7 +148,7 @@
 						this.isshow = false
 					}
 				},
-				onClickLeft() {
+				onClickLeft(id) {
 					this.$router.go(-1)
 			},
 			//获取详情的方法

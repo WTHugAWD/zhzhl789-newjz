@@ -121,7 +121,7 @@
 		<div class="tijiao">
 			<van-button type="default">提交订单</van-button>
 		</div>	
-		</div>
+	
 	</div>
 	
 </template>

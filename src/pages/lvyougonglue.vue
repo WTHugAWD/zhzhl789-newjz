@@ -66,32 +66,32 @@
 				<span>更多</span>
 			</div>
 			<div class="season-tu">
-				<div class="tu-left">
-					<img src="../../img/02.png" alt="" />
+				<div class="tu-left" @click ="goxiangqing(ProductId[0])">
+					<img :src="ImgUrl[0]" alt="" />
 					<p class="tu-left-zi">
-						<漓江-阳朔-世外-刘三姐-张家界-玻璃栈道-凤凰古城双飞9日游>桂湘全</p>
+						{{Title[0]}}</p>
 				</div>
-				<div class="tu-right">
-					<img src="../assets/img/3.jpg" alt="" />
+				<div class="tu-right" @click ="goxiangqing(ProductId[1])">
+					<img :src="ImgUrl[1]" alt="" />
 					<p class="tu-right-zi">
-						<漓江-阳朔-世外-刘三姐-张家界-玻璃栈道-凤凰古城双飞9日游>桂湘全</p>
+						{{Title[1]}}</p>
 				</div>
 			</div>
 			<div class="season-b">
-				<div class="season-b-o">
-					<img src="../../img/02.png" alt="" />
+				<div class="season-b-o" @click ="goxiangqing(ProductId[2])">
+					<img :src="ImgUrl[2]" alt="" />
 					<p class="season-o">
-						<漓江-阳朔-世外-刘三姐-张家界-玻璃栈道-凤凰古城双飞9日游>桂湘全</p>
+						{{Title[2]}}</p>
 				</div>
-				<div class="season-b-t">
-					<img src="../../img/02.png" alt="" />
+				<div class="season-b-t" @click ="goxiangqing(ProductId[3])">
+					<img :src="ImgUrl[3]" alt="" />
 					<p class="season-t">
-						<漓江-阳朔-世外-刘三姐-张家界-玻璃栈道-凤凰古城双飞9日游>桂湘全</p>
+						{{Title[3]}}</p>
 				</div>
-				<div class="season-b-h">
-					<img src="../../img/02.png" alt="" />
+				<div class="season-b-h" @click ="goxiangqing(ProductId[4])">
+					<img :src="ImgUrl[4]" alt="" />
 					<p class="season-h">
-						<漓江-阳朔-世外-刘三姐-张家界-玻璃栈道-凤凰古城双飞9日游>桂湘全</p>
+						{{Title[4]}}</p>
 				</div>
 			</div>
 		</div>
@@ -142,8 +142,12 @@
 		},
 		data() {
 			return {
+				//5个好时节的数组
 				five:[],
-				fivemore:[ ],
+				Title:[],//标题 ,
+				ImgUrl:[],//图片 ,
+				ProductId:[],//跳转的产品ID ,
+				ProductName:[],//产品名称 ,
 				//这个是旅游攻略页面的   热门推荐和  更多的  方法数据
 				traveldata:[],
 				//轮播图相关数据
@@ -159,7 +163,9 @@
 			this.getslide()
 		},
 		methods: {
-			
+			goxiangqing(id){
+				this.$router.replace({name:"chanpinxiangqing",params:{type:id}})
+			},
 			onClickLeft() {
 					this.$router.replace('/lvyougongneng');
 			},
@@ -183,12 +189,11 @@
 			
 			//这是获取旅游攻略页面   更多 的方法
 			getmore(){
-				getMore(10,20).then(res=>{
+				getMore(10,200).then(res=>{
 					// console.log(res)
 					if(res.data.type == 1){
 						this.traveldata = res.data.data.Rows
-					
-					}
+						}
 					}).catch(err=>{
 					console.log(err)
 				})
@@ -202,7 +207,14 @@
 					if(res.data.type == 1){
 						this.five = res.data.data
 						}
-					console.log(this.five)
+						let {five} = this
+					for(var i =0;i<five.length;i++){
+						this.Title = this.Title.concat(five[i].Title)
+						this.ImgUrl = this.ImgUrl.concat(five[i].ImgUrl)
+						this.ProductId = this.ProductId.concat(five[i].ProductId)
+						this.ProductName = this.ProductName.concat(five[i].ProductName)
+					}
+					console.log(this.ProductName)
 				}).catch(err=>{
 					console.log(err)
 				})

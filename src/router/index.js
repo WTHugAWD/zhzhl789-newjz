@@ -35,13 +35,20 @@ Vue.use(Router)
 
 export default new Router({
 //	mode:'history',
+scrollBehavior(to,from,savePosition){
+  if(savePosition){
+    return savePosition
+  }else{
+    return {x:0,y:0}
+  }
+},
   routes: [
     {path: '/',redirect:'/denglu'},
     {path: '/index',name: 'index',component: Index,meta:{keepAlive:false}},//首页
     {path: '/zhuce',name: 'zhuce',component: zhuce},//注册
     {path: '/denglu',name: 'denglu',component: denglu},//登录
     {path: '/password',name: 'password',component: Password},//密码
-    {path: '/liebiao',name: 'liebiao',component: LieBiao},//列表
+    {path: '/liebiao',name: 'liebiao',component: LieBiao,},//列表
     {path: '/lvyougonglue',name: 'lvyougonglue',component: LvYouGongLue},//旅游攻略
     {path: '/chanpinxiangqing',name: 'chanpinxiangqing',component: ChanPinXiangQing,},//产品详情
     //{path: '/list',name: 'list',component: list},//列表
