@@ -203,6 +203,7 @@
 <script>
 import {getHomeTravelStrategy} from "@/api/Home"
 	export default {
+		name:"index",
 		data() {
 			return {
 			
@@ -230,6 +231,14 @@ import {getHomeTravelStrategy} from "@/api/Home"
     			
 			}
 		},
+		beforeRouteLeave(to, from, next) {
+			//设置下一个路由的meta
+			if(to.path == "/liebiao"){
+				to.meta.keepAlive = false;  
+			}
+			
+			next();
+ 		},
 		activated(){
 			this.$store.state.showTab = true;
 		},

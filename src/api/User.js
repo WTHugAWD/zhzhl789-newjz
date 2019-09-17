@@ -29,3 +29,12 @@ export const getUserInfo = (memberId) => {
       'Content-type': 'application/json'}
     })
   }
+ //联系我们 GET /api/user/ContactUs
+ export const Contactus = () =>{
+  return axios.request({
+    url:'user/ContactUs',
+     method: 'get',
+    headers:{'Authorize': localStorage.getItem('AccessToken') + '|' + localStorage.getItem('RefreshToken'),
+    'Content-type': 'application/json'}
+  })
+}

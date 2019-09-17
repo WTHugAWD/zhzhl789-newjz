@@ -137,6 +137,7 @@
 	import  {getSlide}  from '@/api/Home'
 	import  {getMore,getHousjoylist}  from '@/api/Travel'
 	export default {
+		name:"lvyougonglue",
 		components: {
 			HomeNavbar
 		},
@@ -150,6 +151,8 @@
 				ProductName:[],//产品名称 ,
 				//这个是旅游攻略页面的   热门推荐和  更多的  方法数据
 				traveldata:[],
+				pageIndex:1,
+				pageSize:100,
 				//轮播图相关数据
 				slide:[	]
 				}
@@ -189,7 +192,8 @@
 			
 			//这是获取旅游攻略页面   更多 的方法
 			getmore(){
-				getMore(10,200).then(res=>{
+				let {pageSize,pageIndex}  =this
+				getMore(pageIndex,pageSize).then(res=>{
 					// console.log(res)
 					if(res.data.type == 1){
 						this.traveldata = res.data.data.Rows

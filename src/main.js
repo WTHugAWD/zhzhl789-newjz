@@ -33,7 +33,19 @@ Vue.use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn).use(Uploader
 .use(Field).use(Cell).use(Dialog).use(CellGroup).use(Loading).use(NoticeBar).use(NavBar).use(Tabbar).use(TabbarItem)
 Vue.use(lazyload,{loading:'@/assets/img/loading.gif'})
 
-
+// router.beforeEach((to,from,next)=>{
+//     if((to.path =='/liebiao') && (from.path =='/chanpinxiangqing')){
+//       to.meta.keepAlive = true;
+//       next()
+//     }else if((to.path =='/chanpinxiangqing') && (from.path =='/yuyue')){
+//       to.meta.keepAlive = true;
+//       next()
+//     }else{
+//       to.meta.keepAlive = false;
+//       next()
+//     }
+//     next()
+// })
 var onPlusReady = function (callback, context = this) {
   if (window.plus) {
     callback.call(context)
@@ -47,6 +59,7 @@ Vue.mixin({
       this.plusReady = true
     }, this)
   },
+ 
   methods: {
     onPlusReady: onPlusReady
   }

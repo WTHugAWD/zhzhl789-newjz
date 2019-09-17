@@ -127,7 +127,8 @@
 </template>
 
 <script>
-	export default{
+	export default {
+		name:"yuyue",
 		data() {
 		    return {
 		    	radio:"",
@@ -139,6 +140,19 @@
 		      	]
 		    }
 		  },
+			beforeRouteEnter(to,from,next){
+			//to=》自身   from=>从哪里来
+
+			//来自来自预约页面的要缓存
+			if(from.name === 'chanpinxiangqing'){
+				from.meta.keepAlive = true;
+				//来自chanpinxiangqing之外的都要缓存
+			}else if(from.name !== 'chanpinxiangqing'){
+				//从yuyue页面'以外的页面进来的路由，他们本身都需要缓存
+				from.meta.keepAlive = false;
+			};
+			next();
+		},
 		  methods:{
 		    onSearch(){	
 		    },

@@ -6,7 +6,7 @@
 			  left-text="返回"
 			  left-arrow
 			  @click-left="onClickLeft"
-			/>
+			>
 			</van-nav-bar>
 		</header>
 		<!--第一栏-->

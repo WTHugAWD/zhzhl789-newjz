@@ -21,7 +21,7 @@
       <!-- 导航栏 第一排 -->
         <div class="module-box">
             <van-row>
-                <router-link to="">
+                <router-link to="mycoupon">
                 <van-col span="5">
                     <img :src='imgUrl2' alt=""/>
                     <p class="module-text">优惠券</p>
@@ -73,7 +73,7 @@
             </router-link>
             <router-link to="">
                 <van-col span="4">
-                	<router-link to="finished">
+                	<router-link to="pingjiadingdan">
 	                    <img :src=' imgUrl10' alt=""/>
 	                    <p class="module-text2">评价区</p>
                     </router-link>
@@ -217,16 +217,11 @@
             getUserInfo(){
                 let userId = localStorage.UserId;
                  getUserInfo(userId).then(res => {
-                    // console.log(res.data.data);
-                    // this.info.UserName= res.data.data.UserName;
-                    // this.info.Encode =res.data.data.Encode;
-                     //以备不时之需（下方数据）
-                    // this.Phone  =res.data.data.Phone;
-                    // this.Id = res.data.data.Id;
-                    // this.Intergral = res.data.data.Intergral;
-                    // this.LastSignTime = res.data.data.LastSignTime;
-                    // this.SignCount = res.data.data.SignCount
-                  this.info = res.data.data
+                   if(res.data.type == 1){
+                        this.info = res.data.data
+                        
+                   }
+                    console.log(this.info)
                   }).catch(err => {
                     console.log(err);
                 })

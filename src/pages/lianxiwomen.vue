@@ -5,7 +5,7 @@
 			  left-text="返回"
 			  left-arrow
 			  @click-left="onClickLeft"
-			/>
+			>
 		</van-nav-bar>
 		<div class="weixin-phone">
 			<van-row>
@@ -18,7 +18,7 @@
 						<van-popup v-model="show">
 							<p class="tishi">识别图中二维码</p>
 							<div class="erweima">
-								<img src="../assets/img/1.jpg"/>
+								<img :src="database.ImgUrl"/>
 							</div>
 						</van-popup>
 			    	</div>
@@ -39,13 +39,16 @@
 </template>
 
 <script>
+	import {Contactus} from "@/api/User"
 	export default{
 		data() {
 		    return {
 		    	radio: '1',
 		    	value:0,
 		    	show: false,
-		    	showF: false,
+				showF: false,
+				database:[],
+				//ImgUrl   Phone
 		    	//url:require("@/assets/img/return.png"),
 //		      	images: [
 //			        'https://img.yzcdn.cn/vant/apple-1.jpg',
@@ -53,16 +56,30 @@
 //		      	]
 		    }
 		  },
-		  methods:{
+		  created(){
+			  this.getcontactus()
+		  },
+		methods:{
 		    onSearch(){	
 		    },
 		    onClickLeft() {
-		      	Toast('返回');
+				this.$router.go(-1)
 		    },
 		    showPopup() {
 		      this.show = true;
-		    },
-		},
+			},
+			getcontactus(){
+				Contactus().then(res=>{
+					console.log(res)
+					if(res.data.type==1){
+						this.database = res.data.data	
+					}
+					console.log(this.database)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+		}
 	}
 </script>
 

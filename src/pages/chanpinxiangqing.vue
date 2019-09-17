@@ -1,7 +1,7 @@
 <template>
 	<div class="body">
 		<div class="header">
-			<van-nav-bar title="产品详情" left-text="返回" left-arrow @click-left="onClickLeft($route.params.type)" />
+			<van-nav-bar title="产品详情" left-text="返回" left-arrow @click-left="onClickLeft" />
 		</div>
 		<div class="tu">
 			<van-swipe style="width: 100%; height: 100%; overflow: hidden;" :autoplay="2000">
@@ -53,7 +53,7 @@
 						</div>
 					</van-col>
 					<van-col span="8">
-						<div class="wechat" @click="clickme()" >
+						<div class="wechat" @click="clickme(database.Id)" >
 							<div class="wechat-t" v-if="isshow"> <img src="../assets/img/xin2.png" alt="" /></div>
 							<div class="wechat-t" v-else><img src="../assets/img/xin1.png" alt="" /></div>
 							<div class="wechat-b">收藏</div>
@@ -73,6 +73,7 @@
 	import {getProductDetail,getCollection,Collection} from "@/api/Product"
 	import HomeNavbar from '../components/HomeNavbar'
 	export default {
+		name : "chanpinxiangqing",
 		data() {
 			return {
 				isshow:false,
@@ -106,68 +107,92 @@
 			}
 		},
 		created(){
-				this.videoProductId  = this.$route.params.type
-				//调用获取详情方法
-				this.getproductdetail()
+				// 	this.videoProductId  = this.$route.params.type
+				// 	console.log(this.videoProductId)
+				// //调用获取详情方法
+				// this.getproductdetail()
+			
+			},
+		// activated(){
+			
+		// },
+		// beforeRouteEnter(to,from,next){
+		// 	//to=》自身   from=>从哪里来
+
+		// 	//来自来自预约页面的要缓存
+		// 	if(from.name === 'yuyue'){
+		// 		from.meta.keepAlive = true;
+		// 		//来自yuyue之外的都要缓存
+		// 	}else if(from.name !== 'yuyue'){
+		// 		//从yuyue页面'以外的页面进来的路由，他们本身都需要缓存
+		// 		from.meta.keepAlive = false;
+		// 	};
+		// 	next();
+		// },
+		// beforeRouteLeave(to,from,next){
+		// 	// console.log('去',to)
+		// 	// console.log('来',from)
+		// 	//去编辑页不缓存
+		// 	if(to.name === 'yuyue'){
+		// 		to.meta.keepAlive = true;
+		// 	}else if(to.name !== 'yuyue'){
+		// 		to.meta.keepAlive = false;
+		// 	};
+		// 	next();
+		// },
+		// beforeRouteLeave(to, from, next) {
+		// 	// 设置下一个路由的 meta
+		// 	if(to.path=='/liebiao'){
+		// 	to.meta.isUseCache = true;
+		// 	}
+		// 	next();
+		// },
+		// activated(){
+		// 	if(!this.$route.meta.isUseCache){
+		// 	this.getproductdetail()
+		// 	}
+		// } ,
+
+		watch:{
 		
 			},
-			// beforeRouteEnter(to, from, next) {
-			// if (from.path == "/yuyue") {
-			// 		to.meta.isBack = true;
-			// 	} else {
-			// 		to.meta.isBack = false;
-				
-			// 	}
-			// 	next();
-			// },
-		watch:{
-			},
-		// beforeRouteLeave(to,from,next){
-		// 	if(to.path == "/index"){
-		// 		to.meta.keepAlive = false;
-		// 	}else if(to.path == "/liebiao"){
-		// 		to.meta.keepAlive = true;
-		// 		to.meta.isBack = true
-		// 	}else{
-		// 		to.meta.keepAlive = false;
-		// 	}
-			
-		// 	next()
-		// },
-			methods: {
+		methods: {
 				goyuyue(){
 					this.$router.push("/yuyue")
 				},
-				clickme(){
+				clickme(id){
 					let {isshow} = this;
 					if(!isshow){
-						this.getcollection()
+						this.getcollection(id)
 						this.isshow = true;
 					}else{
-						this.uncollection()
+						this.uncollection(id)
 						this.isshow = false
 					}
 				},
-				onClickLeft(id) {
+				onClickLeft() {
 					this.$router.go(-1)
 			},
 			//获取详情的方法
 				getproductdetail(){
 					let {videoProductId} =this;
+					videoProductId = this.$route.params.type;
 					getProductDetail(videoProductId).then(res=>{
 							console.log(res)
 							if(res.data.type==1){
 								this.database = res.data.data
+								
 							}
+							console.log(this.database.AdultPrice)
 							console.log(this.database)
 						}).catch(err=>{
 							console.log(err)
 						})
 				},
 			// 取消收藏
-			uncollection(){
-				let id = "305d4b81-428b-4e59-aaf5-be988ef56bca"
-				Collection(id).then(res=>{
+			uncollection(id){
+				let Id = id
+				Collection(Id).then(res=>{
 					console.log(res)
 					if(res.data.type == 1){
 						this.$toast(res.data.message)
@@ -178,10 +203,9 @@
 			},
 			
 			//收藏产品
-			getcollection(){
+			getcollection(id){
 				let memberId = localStorage.UserId
-				let {Id} = this.database;
-				let productId = "305d4b81-428b-4e59-aaf5-be988ef56bca"
+				let productId = id
 				getCollection(memberId,productId).then(res=>{
 					console.log(res)
 					if(res.data.type==1){

@@ -4,9 +4,9 @@
 			<van-nav-bar title="列表" left-text="返回" left-arrow @click-left="onClickLeft" />
 		</div>
 		<div class="box1">
-			<van-list v-model="isUpLoading" :finished="upFinished" finished-text="没有更多了" @load="onLoadList" :offset = offset>
+			<van-list v-model="isUpLoading" :finished="upFinished" finished-text="没有更多了"  :offset = offset>
 				<ul>
-					<li class="liebiao" v-for="(item,index) in data2" :key="index">
+					<li class="liebiao" v-for="(item,index) in database" :key="index">
 						<router-link :to="{name:'chanpinxiangqing',params:{type:item.Id}}">
 							<div class="liebiao-left">
 								<img :src="item.ImgUrl" />
@@ -36,10 +36,11 @@
 				upFinished: false,
 				index:'',
 				pageIndex:1,//数据页数
-				pageSize:5,//数据条数
+				pageSize:50,//数据条数
 				productType:"",//必须传的参数
 				offset:5,
-				data2:[],
+			
+				hasmore:true,
 				//列表数组
 				database:[
 					// AdultPrice: 452,//儿童价
@@ -51,43 +52,27 @@
 				]
 			}
 		},
-		watch:{
-			productType(){
-				this.database =[];//清空之前的数据
-				this.pageIndex = 1;//请求第一页的数据
-				this.upFinished = false;//代表有更多的数据
-				this.gethometravelstrategy()
-			}
-		},
-		beforeRouteEnter(to,from,next){
-			if(from.path == "/index"||from.path == "/lvyougonglue"){
-					
-				
-			}
-			next()
-		},
-		beforeRouteLeave(to,from,next){
-			if(to.path == "/index"){
-				localStorage.removeItem("data1")
-			}else if(to.path == "/lvyougonglue"){
-				localStorage.removeItem("data1")
-			}else if(to.path == "/chanpinxiangqing"){
-				console.log(11111)
-			}
-			// console.log(this.data2)
-			next()
-		},
+		// beforeRouteLeave(to, from, next) {
+		// 	// 设置下一个路由的 meta
+		// 	if(to.path=='/chanpinxiangqing'){
+		// 		to.meta.isUseCache = false;
+		// 	}
+		// 	next();
+		// 	},
 		created(){
-				// this.productType = this.$route.params.type
-				// console.log(this.productType)
-				// console.log(22222)
-				
+				this.productType =this.$route.params.type
+				this.gethometravelstrategy()
+			},
+		activated(){
+			// console.log(11111)
+			// if(!this.$route.meta.isUseCache){
+			// this.gethometravelstrategy()
+			// }
 		},
 		methods: {
 		//接收参数，进行GET优惠特惠产品，查看更多也是用此接口，旅游攻略同样根据类别
 			gethometravelstrategy(){
 				let {productType,pageSize,pageIndex} = this;
-				productType =this.$route.params.type
 				this.upFinished = true;//先不加载
 				getHomeTravelStrategy(productType,pageIndex,pageSize).then(res=>{
 					// console.log(res)
@@ -95,12 +80,11 @@
 						this.isUpLoading = true//开启加载提示
 						this.upFinished = false;// 加载数据
 						this.database=this.database.concat(res.data.data.Rows)
-						localStorage.setItem("data1",JSON.stringify(this.database)) 
-						this.data2 =JSON.parse(localStorage.getItem("data1"))
 						if(this.database.length >0){this.isUpLoading = false}//数据请求回来关闭加载提示
 						if(this.pageSize*this.pageIndex >= res.data.data.Records){
 							this.upFinished = true;//表示没有更多数据了
 							this.isUpLoading = false;
+							this.hasmore = false;
 							return false;
 						}
 						this.pageIndex ++;
@@ -109,17 +93,18 @@
 					console.log(err)
 				})
 			},
-			onLoadList() {
-
-			  if(this.upFinished){ //没有更多数据了
-                this.isUpLoading = true;//关闭加载提示
-                 return false;//阻止后续代码的请求
-            }
-				this.gethometravelstrategy()
-			},
+			// onLoadList() {
+			
+			// 		if(!this.hasmore){ //没有更多数据了
+			// 		this.isUpLoading = false;//关闭加载提示
+			// 		this.upFinished = true;//表示没有更多数据了
+			// 		return false;//阻止后续代码的请求
+            // }
+			// },
 			onClickLeft(){
 				this.$router.go(-1);
 			},
+		
 		}
 	}
 </script>
