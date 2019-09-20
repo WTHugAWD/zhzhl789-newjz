@@ -33,7 +33,7 @@
                     <p class="module-text">积分</p>
                 </van-col>
                 </router-link>
-                <router-link to="">
+                <router-link to="wodeshoucang">
                 <van-col span="4">
                     <img :src='imgUrl5' alt=""/>
                     <p class="module-text">收藏</p>
@@ -59,13 +59,13 @@
             <van-row>
              <router-link to="">
                <van-col span="5">
-	               	<router-link to="evaluate">
+	               	<router-link to="payment" tag="div">
 	               		<img :src=' imgUrl8' alt=""/>
-	                    <p class="module-text2">待评价</p>
+	                    <p class="module-text2">待付款</p>
 	               	</router-link>  
                 </van-col>
              </router-link>
-             <router-link to="paymented">
+             <router-link to="paymented" tag="div">
                 <van-col span="5">
                     <img :src=' imgUrl9' alt=""/>
                     <p class="module-text2">已支付</p>
@@ -73,7 +73,7 @@
             </router-link>
             <router-link to="">
                 <van-col span="4">
-                	<router-link to="pingjiadingdan">
+                	<router-link to="evaluate" tag="div">
 	                    <img :src=' imgUrl10' alt=""/>
 	                    <p class="module-text2">评价区</p>
                     </router-link>
@@ -81,7 +81,7 @@
             </router-link>
             <router-link to="">
                 <van-col span="5">
-                	<router-link to="finished">
+                	<router-link to="finished" tag="div">
 	                    <img :src='imgUrl11' alt=""/>
 	                    <p class="module-text2">已完成</p>
                     </router-link>
@@ -89,7 +89,7 @@
             </router-link>
               <router-link to="">
                  <van-col span="5">
-                 	<router-link to="Paymented">
+                 	<router-link to="Paymented" tag="div">
 	                    <img :src='imgUrl9' alt=""/>
 	                    <p class="module-text2">退款</p>
                     </router-link>  

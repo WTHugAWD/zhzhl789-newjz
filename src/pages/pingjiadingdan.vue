@@ -7,19 +7,19 @@
 			  left-arrow
 			  @click-left="onClickLeft"
 			/>
-			<span class="tijiao">提交</span>
+			<span class="tijiao" @click ="tijiao()">提交</span>
 		</div>
 		<div class="second-module">
 			<van-row>
 			  <van-col span="8">
-			  	<img class="tu" src="../assets/img/1.jpg" />
+			  	<img class="tu" :src="$route.params.type.image" />
 				  </van-col>
 			  	<div class="tu-right">
 			  		<van-col span="16">
 			  			<span class="xiangfu">相符描述</span>
 			  			<div class="xiangfu-star">
 				  			<van-rate
-								<van-rate v-model="value" />
+								van-rate v-model="value1" />
 			  			</div>
 					</van-col>
 				</div>				  
@@ -38,7 +38,7 @@
 				<van-col span="8">
 			  		 <div class="fuwu-star">
 			  			<van-rate
-						 <van-rate v-model="value" />
+						 van-rate v-model="value" />
 			  		 </div>	
 				</van-col>
 			</div>
@@ -48,25 +48,59 @@
 </template>
 
 <script>
+import {PostEvaluation} from "@/api/Order"
 	export default{
 		data() {
 		    return {
 		    	radio:"",
-		    	value:0,
+				value:0,
+				value1:1,
+				txt:"相关评价",
 		    	url:require("@/assets/img/return.png"),
 		      	images: [
 			        'https://img.yzcdn.cn/vant/apple-1.jpg',
 			        'https://img.yzcdn.cn/vant/apple-2.jpg'
-		      	]
+				  ],
+				database:{
+                    MemberId:"str",//: 用户ID ,
+                    OrderId :"",//: 订单ID ,
+                    Consistent:1,// 相符描述 ,
+                    Describe:"str",//: 评价 ,
+                    ImgUrl:"",// : 照片 ,
+                    Anonymous :false,//  是否匿名 ,
+                    Serve :1,//  服务描述
+                }	
 		    }
+		  },
+		  created(){
+			  console.log(this.$route.params.type.orderid)
+			   console.log(this.$route.params.type.image)
+			  	this.database.MemberId = localStorage.UserId
+				this.database.orderId = this.$route.params.type.orderid
+				this.database.Consistent = this.value1;
+				this.database.Describe = this.txt
+				this.database.ImgUrl = this.$route.params.type.image
+				this.database.Anonymous = false;
+				this.database.Serve = this.value;
 		  },
 		  methods:{
 		    onSearch(){	
-		    },
+			},
+			tijiao(){
+				this.postevaluation()
+			},
 		     onClickLeft() {
 		     this.$router.go(-1)
 		    },
-		   
+		       //订单评价
+        postevaluation(){
+			let {database} = this
+        	PostEvaluation(database).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+        },
 		  }
 		
 	}

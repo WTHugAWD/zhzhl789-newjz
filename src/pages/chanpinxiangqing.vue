@@ -16,7 +16,7 @@
 			<div class="jiang">
 				<van-row gutter="20">
 					<van-col span="8">
-						<div class="jiang-l">价格：<span class="jiang-zi">{{'￥'+database.AdultPrice}}</span></div>
+						<div class="jiang-l">价格：<span class="jiang-zi">{{'￥'+database.ChildrenPrice}}</span></div>
 					</van-col>
 					<van-col span="8">
 						<div class="jiang-m">已预约：{{database.AppointCount}}</div>
@@ -49,7 +49,7 @@
 					<van-col span="8">
 						<div class="wechat">
 							<div class="wechat-t"><img src="../assets/img/phone.png" alt="" /></div>
-							<div class="wechat-b">电话</div>
+							<a :href="database.Phone" style="color: #000;" class="wechat-b">电话</a>
 						</div>
 					</van-col>
 					<van-col span="8">
@@ -62,7 +62,7 @@
 				</van-row>
 			</div>
 			<div class="weixin-right">
-				<button @click = "goyuyue">马上预约</button>
+				<button @click ="goyuyue(database.Id,database.Title,database.SortTitle,database.AdultPrice,database.ChildrenPrice,database.ImgUrl)">马上预约</button>
 			</div>
 		</div>
 
@@ -71,6 +71,7 @@
 
 <script>
 	import {getProductDetail,getCollection,Collection} from "@/api/Product"
+	import {Contactus} from "@/api/User"
 	import HomeNavbar from '../components/HomeNavbar'
 	export default {
 		name : "chanpinxiangqing",
@@ -106,59 +107,34 @@
 				]
 			}
 		},
+		beforeRouteEnter(to,from,next){
+			if(from.name =="yuyue"){//如果是从产品详情来的，将isback：true
+				to.meta.isBack=true
+			}
+			next()
+			},
 		created(){
-				// 	this.videoProductId  = this.$route.params.type
-				// 	console.log(this.videoProductId)
-				// //调用获取详情方法
-				// this.getproductdetail()
-			
-			},
-		// activated(){
-			
-		// },
-		// beforeRouteEnter(to,from,next){
-		// 	//to=》自身   from=>从哪里来
-
-		// 	//来自来自预约页面的要缓存
-		// 	if(from.name === 'yuyue'){
-		// 		from.meta.keepAlive = true;
-		// 		//来自yuyue之外的都要缓存
-		// 	}else if(from.name !== 'yuyue'){
-		// 		//从yuyue页面'以外的页面进来的路由，他们本身都需要缓存
-		// 		from.meta.keepAlive = false;
-		// 	};
-		// 	next();
-		// },
-		// beforeRouteLeave(to,from,next){
-		// 	// console.log('去',to)
-		// 	// console.log('来',from)
-		// 	//去编辑页不缓存
-		// 	if(to.name === 'yuyue'){
-		// 		to.meta.keepAlive = true;
-		// 	}else if(to.name !== 'yuyue'){
-		// 		to.meta.keepAlive = false;
-		// 	};
-		// 	next();
-		// },
-		// beforeRouteLeave(to, from, next) {
-		// 	// 设置下一个路由的 meta
-		// 	if(to.path=='/liebiao'){
-		// 	to.meta.isUseCache = true;
-		// 	}
-		// 	next();
-		// },
-		// activated(){
-		// 	if(!this.$route.meta.isUseCache){
-		// 	this.getproductdetail()
-		// 	}
-		// } ,
-
-		watch:{
-		
-			},
+			console.log(this.$route.params.type)
+			console.log(this.$route.meta.isBack)
+			//调用获取微信，手机号方法
+			if(!this.$route.meta.isBack){//如果进入到该页面的是除了chanpinxiangqing 并且判断 是不是第一次进入的该页面
+				// this.database = [];
+				this.getproductdetail()
+			}
+				this.$route.meta.isBack = false
+		},
+		beforeRouteLeave(to,from,next){
+			if(to.name !== "yuyue"){
+				this.$route.meta.keepAlive =false//如果去到首页  不缓存本页面
+				this.$route.meta.isBack = false
+			}else if(to.name == "yuyue"){
+				this.$route.meta.keepAlive =true//否则  缓存本页面
+			}
+			next()
+		},
 		methods: {
-				goyuyue(){
-					this.$router.push("/yuyue")
+				goyuyue(id,title,sorttitle,AdultPrice,ChildrenPrice,image){
+					this.$router.push({name:"yuyue",params:{data:{id:id,title:title,sorttitle:sorttitle,AdultPrice:AdultPrice,ChildrenPrice:ChildrenPrice,image:image}}})
 				},
 				clickme(id){
 					let {isshow} = this;
@@ -172,19 +148,30 @@
 				},
 				onClickLeft() {
 					this.$router.go(-1)
+			}, 
+			//获取微信，手机号
+			getcontactus(){
+				Contactus().then(res=>{
+					// console.log(res)
+					if(res.data.type==1){
+						this.database = res.data.data	
+					}
+					// console.log(this.database)
+				}).catch(err=>{
+					console.log(err)
+				})
 			},
 			//获取详情的方法
 				getproductdetail(){
-					let {videoProductId} =this;
-					videoProductId = this.$route.params.type;
-					getProductDetail(videoProductId).then(res=>{
+					this.videoProductId = this.$route.params.type;
+					getProductDetail(this.videoProductId).then(res=>{
 							console.log(res)
 							if(res.data.type==1){
 								this.database = res.data.data
 								
 							}
-							console.log(this.database.AdultPrice)
-							console.log(this.database)
+							// console.log(this.database.AdultPrice)
+							// console.log(this.database)
 						}).catch(err=>{
 							console.log(err)
 						})
@@ -193,7 +180,7 @@
 			uncollection(id){
 				let Id = id
 				Collection(Id).then(res=>{
-					console.log(res)
+					// console.log(res)
 					if(res.data.type == 1){
 						this.$toast(res.data.message)
 					}
@@ -207,7 +194,7 @@
 				let memberId = localStorage.UserId
 				let productId = id
 				getCollection(memberId,productId).then(res=>{
-					console.log(res)
+					// console.log(res)
 					if(res.data.type==1){
 						this.$toast(res.data.message)
 					}

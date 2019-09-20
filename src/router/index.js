@@ -7,7 +7,7 @@ import Password from '@/pages/password'//密码
 import LieBiao from '@/pages/liebiao'//列表
 import LvYouGongLue from '@/pages/lvyougonglue'//旅游攻略
 import ChanPinXiangQing from '@/pages/chanpinxiangqing'//产品详情
-import xiangqing from '@/pages/xiangqing'//详情
+// import xiangqing from '@/pages/xiangqing'//详情
 import youhuiquan from '@/pages/youhuiquan'//优惠券
 import yuyue from '@/pages/yuyue'//预约
 import ZiXunXiangQing from '@/pages/zixunxiangqing'//资讯详情页面
@@ -29,6 +29,11 @@ import searchpage from '@/pages/searchpage'//搜索页面
 import ZiXun from '@/pages/zixun'//资讯页面
 import Dao from "@/pages/dao" //签到页面
 import MyCoupon from "@/pages/mycoupon" //我的优惠券
+import evaluate from "@/pages/evaluate" //评价订单列表
+import finished from "@/pages/finished" //评价订单列表
+import WoDeShouCang from "@/pages/wodeshoucang" //我的收藏列表
+import payment from "@/pages/payment" //待付款
+import Zaixianzhifu from "@/pages/zaixianzhifu"//在线支付
 
 
 
@@ -45,17 +50,17 @@ scrollBehavior(to,from,savePosition){
 },
   routes: [
     {path: '/',redirect:'/denglu'},
-      {path: '/index',name: 'index',component: Index,meta:{keepAlive:false}},//首页
+    {path: '/index',name: 'index',component: Index,meta:{keepAlive:false}},//首页
     {path: '/zhuce',name: 'zhuce',component: zhuce},//注册
     {path: '/denglu',name: 'denglu',component: denglu},//登录
     {path: '/password',name: 'password',component: Password},//密码
-      {path: '/liebiao',name: 'liebiao',component: LieBiao,meta:{keepAlive:true,isUseCache:false}},//列表
+    {path: '/liebiao',name: 'liebiao',component: LieBiao,meta:{keepAlive:true,isBack:false}},//列表
     {path: '/lvyougonglue',name: 'lvyougonglue',component: LvYouGongLue},//旅游攻略
-    {path: '/chanpinxiangqing',name: 'chanpinxiangqing',component: ChanPinXiangQing,meta:{keepAlive:true,isUseCache:false}},//产品详情
+    {path: '/chanpinxiangqing',name: 'chanpinxiangqing',component: ChanPinXiangQing,meta:{keepAlive:true,isBack:false}},//产品详情
     //{path: '/list',name: 'list',component: list},//列表
     // {path: '/xiangqing',name: 'xiangqing',component: xiangqing},//详情
     {path: '/youhuiquan',name: 'youhuiquan',component: youhuiquan},//优惠券
-    {path: '/yuyue',name: 'yuyue',component: yuyue},//预约
+    {path: '/yuyue',name: 'yuyue',component: yuyue,meta:{keepAlive:false}},//预约
     {path: '/zixunxiangqing',name: 'zixunxiangqing',component: ZiXunXiangQing},//资讯详情 
     {path: '/pingjiadingdan',name: 'pingjiadingdan',component: pingjiadingdan},//评价订单
     {path: '/shenqingtuikuan',name: 'shenqingtuikuan',component: shenqingtuikuan},//申请退款
@@ -73,9 +78,13 @@ scrollBehavior(to,from,savePosition){
     {path: '/yizhifu',name: 'yizhifu',component: YiZhiFu},//已支付
     {path: '/searchpage',name: 'searchpage',component: searchpage},//搜索页面
     {path: '/zixun',name: 'zixun',component: ZiXun},//资讯页面
-    {path: '/dao',name: 'dao',component: Dao},//资讯页面
+    {path: '/dao',name: 'dao',component: Dao},//签到页面
     {path: '/mycoupon',name: 'mycoupon',component: MyCoupon},//我的优惠券
-
+    {path: '/evaluate',name: 'evaluate',component: evaluate},//获取评价订单列表
+    {path: '/finished',name: 'finished',component: finished},//已完成
+    {path: '/wodeshoucang',name: "wodeshoucang",component :WoDeShouCang},//用户收藏列表
+    {path: "/payment", name:"payment",component :payment},//代付款
+    {path: "/zaixianzhifu", name:"zaixianzhifu",component :Zaixianzhifu}//在线付款
     // {path: '/zixunxiangqing',name: 'zixunxiangqing',component: zixunxiangqing}//资讯详情
   ]
 })

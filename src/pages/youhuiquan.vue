@@ -119,7 +119,7 @@ import {getHomeYouHuiQuan,getReceiveCoupons} from "@/api/Home"
 		      	],
 				show: false,
 				pageIndex:1,
-				pageSize:4,
+				pageSize:40,
 				database:[],
 		
 				// 	{
@@ -180,13 +180,13 @@ import {getHomeYouHuiQuan,getReceiveCoupons} from "@/api/Home"
 					console.log(res);
 					if(res.data.type==1){
 						this.database =this.database.concat(res.data.data.Rows) 
+						localStorage.setItem("youhuiquan",JSON.stringify(this.database))
 						if(this.pageIndex * this.pageSize>= res.data.data.Records){
 							return false
 						}
 						this.pageIndex++
-						console.log(this.pageIndex)
-					}
-					
+											}
+				
 					console.log(this.database)
 				}).catch(err=>{
 					 console.log(err)
@@ -215,6 +215,7 @@ import {getHomeYouHuiQuan,getReceiveCoupons} from "@/api/Home"
 	.container{
 		background: #f3f3f3;
 		margin-top: 0.6rem;
+		padding-bottom:0.6rem;
 	}
     .title{
 		height: 0.45rem;

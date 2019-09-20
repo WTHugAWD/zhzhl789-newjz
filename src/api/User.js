@@ -38,3 +38,13 @@ export const getUserInfo = (memberId) => {
     'Content-type': 'application/json'}
   })
 }
+//获取验证码 GET /api/user/SmsCode
+export const getSmsCode = (phone,codeType) =>{
+  return axios.request({
+    url:'user/SmsCode',
+     method: 'get',
+     params:{phone:phone,codeType:codeType},
+    headers:{'Authorize': localStorage.getItem('AccessToken') + '|' + localStorage.getItem('RefreshToken'),
+    'Content-type': 'application/json'}
+  })
+}

@@ -19,7 +19,7 @@
 		<div class="tu">
 			<van-swipe style="width: 100%; height: 100%; overflow: hidden;" :autoplay="2000">
 				<van-swipe-item v-for="(image, index) in bannerList" :key="index">
-					<router-link :to='{name:"chanpinxiangqing",params:{type:image.Id}}'>
+					<router-link :to='{name:"chanpinxiangqing",params:{type:image.ProductId}}'>
 						<img class="swiper-banner" :src="image.ImgUrl"/>
 					</router-link>
 				</van-swipe-item>
@@ -231,14 +231,7 @@ import {getHomeTravelStrategy} from "@/api/Home"
     			
 			}
 		},
-		beforeRouteLeave(to, from, next) {
-			//设置下一个路由的meta
-			if(to.path == "/liebiao"){
-				to.meta.keepAlive = false;  
-			}
-			
-			next();
- 		},
+	
 		activated(){
 			this.$store.state.showTab = true;
 		},
@@ -290,7 +283,6 @@ import {getHomeTravelStrategy} from "@/api/Home"
 				if(res.data.type==1){
 					this.rows = res.data.data.Rows
 					}
-					console.log(this.rows)
 				}).catch(err=>{
 					console.log(err)
 				})	
@@ -306,7 +298,7 @@ import {getHomeTravelStrategy} from "@/api/Home"
 						'Content-type': 'application/json'
 					}
 				}).then(res => {
-					console.log(res.data)
+					// console.log(res.data)
 					//提示信息
 					if(res.data.type == 1){
 						this.bannerList = res.data.data;
@@ -327,7 +319,7 @@ import {getHomeTravelStrategy} from "@/api/Home"
 						'Content-type': 'application/json'
 					}
 				}).then(res => {
-					console.log(res.data)
+					// console.log(res.data)
 					//提示信息
 					if(res.data.type == 1){
 						this.videoList = res.data.data.Rows;

@@ -12,14 +12,14 @@
        <!--第一栏-->
 		<div class="column1">
         		<div class="tu">
-        			<img class="photo" src="../assets/img/2.jpg" />
+        			<img class="photo" :src="img" />
         		</div>
         		<div class="project">
-        			<div class="project-name">凤凰古城双飞9日游</div>
-        			<div class="project-word"><漓江-阳朔-世外-刘三姐-张家界-玻璃栈桥-凤凰古城双飞9日游>桂湘全</div>
+        			<div class="project-name" v-html="title"></div>
+        			<div class="project-word" v-html="sorttitle"></div>
         			<div class="project-price">
         				<span class="yangjaio">￥</span>
-        				<span class="money">5698</span>
+        				<span class="money">{{database.ChildrenPrice}}</span>
         				<span class="qi">起</span>
         			</div>
         		</div>
@@ -31,7 +31,7 @@
 				<van-row>
 				  <van-col span="24">
 				  	<van-cell-group>
-					  <van-field v-model="value" placeholder="可选最早/最晚出发日期" />
+					  <van-field v-model="date" placeholder="可选最早/最晚出发日期" />
 					</van-cell-group>
 				  </van-col>
 				</van-row>
@@ -43,7 +43,7 @@
 			<div class="line">
 				<van-row>
 					<van-col span="12">
-					  <van-cell title="儿童价：1988/人" />
+					  <van-cell title="儿童价：2222/人"/>
 				  	</van-col>
 				  	<van-col span="12">
 				  		<div class="jia-jian clearfix">
@@ -81,14 +81,14 @@
 			  <van-col span="24">		
 				<div class="biaoge">
 					<span class="word">手机号</span>
-				    <input type="text" placeholder="请输入手机号" />	
+				    <input type="text" placeholder="请输入手机号"/>	
 				</div>
 			  </van-col>
 			  <van-col span="24">
 			  		<div class="biaoge">
 				  		<span class="word">验证码</span>
-					    <input type="password" placeholder="请输入验证码"/>
-					    <button class="fasong">发送验证码</button>
+					    <input type="text" placeholder="请输入验证码"/>
+					    <button class="fasong" @click="getcode()">发送验证码</button>
 					</div>
 			  </van-col>
 			</van-row>
@@ -96,7 +96,7 @@
 		<!--第五栏-->	
 		<div class="liuyan">
 			<div class="liuyan-title">出游留言：</div>
-			<div class="liuyan-content">请输入出游留言......</div>
+			<textarea class="liuyan-content" placeholder="请输入出游留言......"></textarea>
 		</div>
 		<!--第六栏-->	
 		<div class="zhifu">
@@ -107,7 +107,7 @@
 				    <van-cell title="到店支付" clickable @click="radio = '1'">
 				      <van-radio slot="right-icon" name="1" />
 				    </van-cell>
-				    <router-link to="zaixianzhifu">
+				    <router-link :to="{name:'zaixianzhifu',params:{type:database.ProductId}}">
 				    	<van-cell title="在线支付" clickable @click="radio = '2'">
 					      <van-radio slot="right-icon" name="2" />
 					    </van-cell>
@@ -119,7 +119,7 @@
 		</div>
 		<!--第七栏-->	
 		<div class="tijiao">
-			<van-button type="default">提交订单</van-button>
+			<van-button type="default" @click ="clickme()">提交订单</van-button>
 		</div>	
 	
 	</div>
@@ -127,7 +127,9 @@
 </template>
 
 <script>
-	export default {
+	import {PostPlaceOrder} from "@/api/Order"
+	import {getSmsCode} from "@/api/User"
+		export default {
 		name:"yuyue",
 		data() {
 		    return {
@@ -137,8 +139,61 @@
 		      	images: [
 			        'https://img.yzcdn.cn/vant/apple-1.jpg',
 			        'https://img.yzcdn.cn/vant/apple-2.jpg'
-		      	]
-		    }
+				  ],
+				  date:"",
+				  img:"",
+				  title:"",
+				  sorttitle:"",
+				  ph:"13864284868",
+				  name:"ceshi123",
+				  code:"123456",
+				  AdultNum:1,
+				  ChildrenNum:1,
+				  str1:"2019-10-1",
+				  str2:"2019-11-2",
+				  txt:"旅游留言",
+				database:{
+					Code:"123456", //验证码 ,
+					MemberId:"36eedd51-b59c-454f-8630-adf9815a03e7",//用户ID ,
+					ProductId:"ca89fa50-20f4-42e4-a947-c95e0bd35772",//产品ID ,
+					TravelStartTime:"2019-10-1",//计划出行开始时间 ,
+					TravelEndTime:"2019-11-2",// 计划出行结束时间 ,
+					ChildrenPrice:1,//儿童价 ,
+					ChildrenNum:1,//儿童人数 ,
+					AdultPrice:1,//成人价 ,
+					AdultNum:1,// 成人数 ,
+					Name:"ceshi123", //联系人 ,
+					Phone:"13864284868", //手机号 ,
+					Message :"旅游留言",//旅游留言 ,
+					PaymentType :false,//支付方式 false：到店支付 true：在线支付 ,
+					// PaymentWay :, //支付方式 false：微信 true：支付宝 ,
+					OrderPrice:1,//订单原价 ,
+					CouponsId :"ca89fa50-20f4-42e4-a947-c95e0bd35772",//抵扣券ID
+				},
+		    } 
+		  },
+		  created(){
+			  	this.img=this.$route.params.data.image
+				this.title=this.$route.params.data.title
+				this.sorttitle= this.$route.params.data.sorttitle
+				let {database}  = this
+				database.MemberId = localStorage.UserId;
+				database.ProductId = this.$route.params.data.id;
+				database.ChildrenPrice =this.$route.params.data.ChildrenPrice
+				database.AdultPrice = this.$route.params.data.AdultPrice
+				database.TravelStartTime = this.str1;
+				database.TravelEndTime = this.str2;
+				database.Phone = this.ph
+				database.Name = this.name
+				database.Code = this.code
+				database.ChildrenNum = this.ChildrenNum;
+				database.AdultNum = this.AdultNum;
+				database.OrderPrice =this.$route.params.data.ChildrenPrice + this.$route.params.data.AdultPrice
+				database.Message = this.txt;
+				database.CouponsId="ca89fa50-20f4-42e4-a947-c95e0bd35772";
+				database.PaymentType = false;
+				// database.PaymentWay = false;
+				
 		  },
 			beforeRouteEnter(to,from,next){
 			//to=》自身   from=>从哪里来
@@ -153,13 +208,41 @@
 			};
 			next();
 		},
-		  methods:{
+		methods:{
+			//调用 预约的方法
+			clickme(){
+				this.postplaceorder()
+			},
+			//调用获取验证码的方法
+			getcode(){
+				this.getsmscode()
+			},
 		    onSearch(){	
 		    },
 		    onClickLeft() {
 		     this.$router.replace("/chanpinxiangqing")
-		    },
-		  }
+			},
+			//获取验证码
+			getsmscode(){
+				let phone = this.ph
+				getSmsCode(phone,2).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+		
+			//预约
+			postplaceorder(){
+				let {database} = this
+				PostPlaceOrder(database).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+			 
+		}
 		
 	}
 </script>
@@ -230,7 +313,7 @@
 		float: left;
 		width: 68%;
 		padding:0.1rem;
-		box-sizing: border-box;
+	    box-sizing: border-box;
 	}
 	
 	.project-name{
@@ -445,6 +528,7 @@
 		height: 0.4rem;
 		background-color: white;
 		margin-top: 0.08rem;
+		margin-bottom :0.6rem;
 	}
 	.van-button{
 		width: 1.1rem;

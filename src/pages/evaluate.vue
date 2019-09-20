@@ -1,12 +1,49 @@
 <template>
 	<div class="body">
-        <div class="title">
+        <!-- <div class="title">
             <div class="returnImg"><img :src="imgUrl1" alt=""></div>
-             <span class="back"  @click="onClickLeft">返回</span>
+             <span class="back"  @click.self="goback">返回</span>
             <span class="title-name">评价</span>
-        </div>
+        </div> -->
+        <header>
+			<van-nav-bar
+			  title="评价"
+			  left-text="返回"
+			  left-arrow
+			  @click-left="onClickLeft"
+			>
+			</van-nav-bar>
+		</header>
         <div class="line"></div>
-        <div class="list-box">
+
+        <div class="list-box"
+            v-for="item in database"
+            :key="item.Id"
+        >
+            <div class="photo" @click="toyizhifu(item.Id)">
+            <img :src="item.ProductImg" alt="">
+        </div>
+        <div class="tour-text">
+            <span class="text1">{{item.ProductName}}</span><br>
+            <span class="text2">
+                订单总价：{{item.OrderPirce}}
+            </span>
+            <span class="text3"><br>
+               出行日期：{{item.TravelTime}}
+            </span>
+            <span class="text4"><br>
+              付款方式: {{item.PaymentType}}
+            </span>
+            <!-- <p class="text5">
+                失效
+            </p> -->
+             <div class="purchase" @click ="clickme(item.OrderNo,item.ProductImg)">未评价</div>
+        </div>
+             
+        </div>
+
+
+         <!-- <div class="list-box">
             <div class="photo">
             <img :src="imgUrl" alt="">
         </div>
@@ -21,131 +58,66 @@
             <span class="text4"><br>
               付款方式: 在线支付
             </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>
-        </div>
-        <div class="purchase">未评价</div>
-   
-    <!-- *********** -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>  
-    </div>
-     <div class="purchase">未评价</div>
-      
-    <!-- ************ -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div> 
-    </div>
-    <div class="purchase">未评价</div>
-       
-    <!-- **************** -->
-    <div class="list-box">
-         <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>    
-    </div>
-     <div class="purchase">未评价</div>
-      
-    <!-- *********** -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>   
-    </div>
-    <div class="purchase">未评价</div>
-   
- </div>
+        
+             <div class="purchase">未评价</div>
+        </div> -->
+             
+        <!-- </div> -->
+     </div>
 </template>
 
 <script>
 	import qs from 'qs'
 	import md5 from 'js-md5';
 //	import thisisjsonp from 'jsonp'
-
+    import {getOrderList} from "@/api/Order"
+    import HomeNavbar from '../components/HomeNavbar'
 	export default {
 		name: 'evaluate',
 		data() {
 			return {
                 imgUrl:require("@/assets/img/fenghuang.jpg"),
-                imgUrl1:require("@/assets/img/return.png"),	 	
+                imgUrl1:require("@/assets/img/return.png"),	 
+                pageSize:100,
+                pageIndex:1,
+                database:[]
 			}
-		},
+        },
+   
 		activated(){
 			this.$store.state.showTab = true;
 		},
 		created() {
-			this.$store.state.showTab = true;
+            this.$store.state.showTab = true;
+              // 调用获取订单列表的方法
+            this.getorderlist()
+
 		},
 		methods: {
-			onClickLeft(){
-				this.$router.go(-1)
-			}
+            toyizhifu(orderno){
+                this.$router.push({name:"yizhifu",params:{type:orderno}})
+            },
+		     onClickLeft() {
+		      this.$router.go(-1)
+			},
+          
+            clickme(orderid,image){
+               this.$router.push({name:"pingjiadingdan",params:{type:{orderid:orderid,image:image}}})
+            },
+        //根据订单状态获取订单列表
+        getorderlist(){
+            let memberId = localStorage.UserId
+            let orderState = 0;
+            let {pageIndex,pageSize} = this
+            getOrderList(memberId,orderState,pageIndex,pageSize).then(res=>{
+                console.log(res)
+                if(res.data.type==1){
+                    this.database = res.data.data.Rows
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
 			
 		}
 		
@@ -158,7 +130,7 @@
 	@import "../assets/css/index.styl" 
 	.body{
 		background: #fff;
-		padding-top: 0.45rem;
+		// padding-top: 0.45rem;
 		padding-bottom:0.7rem;
         overflow: hidden;
         
@@ -167,48 +139,52 @@
         margin :0;
         padding :0;
     }
-   .title {
-        width: 100%;
-		height: 0.45rem;
-		line-height: 0.45rem;
-		position: fixed;
-		top: 0;
-		left: 0;
-        background :#fff;
-    }
-    .title-name  {
-       position: relative;
-       z-index: 10;
-       display :block;
-       text-align :center;
-       line-height :0.45rem;
-       font-size :0.2rem;          
-    }
-    .title .returnImg {
-        width :0.2rem;
-        height :0.2rem;
-         position: absolute;
-       top: 0.04rem;
-       left: 0.1rem;
-       z-index: 10;
-       display :block;   
-    }
-    .title .returnImg img {
-        width :100%;
-        height :100%;
-    }
-    .back {
+//    .title {
+//         width: 100%;
+// 		height: 0.45rem;
+// 		line-height: 0.45rem;
+// 		position: fixed;
+// 		top: 0;
+// 		left: 0;
+//         background :#fff;
+//     }
+//     .title-name  {
+//        position: relative;
+//        z-index: 10;
+//        display :block;
+//        text-align :center;
+//        line-height :0.45rem;
+//        font-size :0.2rem;          
+//     }
+//     .title .returnImg {
+//         width :0.2rem;
+//         height :0.2rem;
+//          position: absolute;
+//        top: 0.04rem;
+//        left: 0.1rem;
+//        z-index: 10;
+//        display :block;   
+//     }
+//     .title .returnImg img {
+//         width :100%;
+//         height :100%;
+//     }
+//     .back {
       
-       position: absolute;
-       top: 0;
-       left: 0.3rem;
-       z-index: 10;
-       height :0.45rem;
-       display :block;
+//        position: absolute;
+//        top: 0;
+//        left: 0.3rem;
+//        z-index: 10;
+//        height :0.45rem;
+//        display :block;
        
-       line-height :0.45rem;
-       font-size :0.15rem;  
-    }
+//        line-height :0.45rem;
+//        font-size :0.15rem;  
+//     }
+    .heade {
+       background :#fff;
+       color :black;
+      }
     .line {
         width :100%;
         height :0.02rem;
@@ -217,6 +193,7 @@
     .list-box {
         width :100%;
         height:1.2rem;
+        position :relative;
        
     }
     .photo {
@@ -238,8 +215,7 @@
         margin-top :.1rem;
         margin-left :.05rem;
         overflow :hidden;
-        width :1.9rem;
-        // height :0.9rem;
+     
         
 
     }
@@ -266,25 +242,13 @@
            padding-top :.05rem;
            color :#5a5a5a;
      }
-    //   .tour-text .text5 {
-    //       width :0.3rem;
-    //       height :0.15rem;
-    //       background :#d2d2d2;
-    //        font-size :0.1rem;
-    //        color :#fff;
-    //        border :0.01rem solid #f1f1f1;
-    //        border-radius:0.05rem;
-    //        text-align :center;
-    //        line-height :0.15rem;
-    //        margin-top :0.02rem;
-    //        display :none;
-    //   }
+    
      .purchase  {
          border-radius: 0.5rem;
          float:right;
         background :#fff;
-       margin-top :-0.22rem;
-        margin-right :.08rem;
+ 
+        position :absolute;
         width :0.6rem;
         height :0.2rem;
        border :0.01rem solid #56a8fc;
@@ -292,6 +256,8 @@
        line-height :0.2rem;
        text-align :center;
        font-size :0.11rem;
+       right :0.05rem;
+    //    bottom :0.2rem;
      }
      .photo1 {
         width :1.3rem;

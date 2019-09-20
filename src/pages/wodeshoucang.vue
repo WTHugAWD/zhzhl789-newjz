@@ -1,7 +1,7 @@
 <template>
 	<div class="body">
 		<div class="menu">
-			<van-nav-bar title="列表" left-text="返回" left-arrow @click-left="onClickLeft" />
+			<van-nav-bar title="我的收藏" left-text="返回" left-arrow @click-left="onClickLeft" />
 		</div>
 		<div class="box1">
 			<van-list v-model="isUpLoading" :finished="upFinished" finished-text="没有更多了"  :offset = offset>
@@ -26,71 +26,46 @@
 </template>
 
 <script>
-	import HomeNavbar from '../components/HomeNavbar'
-	import {getHomeTravelStrategy} from  "@/api/Home"
+    import {getList} from "@/api/Product"
 	export default {
-		name:"liebiao",
+		name:"wodeshoucang",
 		data() {
 			return {
 				isUpLoading: false,
 				upFinished: false,
 				index:'',
 				pageIndex:1,//数据页数
-				pageSize:50,//数据条数
-				productType:"",//必须传的参数
-				offset:5,
-			
-				hasmore:true,
+				pageSize:150,//数据条数
+                offset:15,
+                hasmore:true,
 				//列表数组
 				database:[
-					// AdultPrice: 452,//儿童价
-					// ChildrenPrice: 452,//儿童价
-					// Id: "00",//id
-					// ImgUrl: "http:/c6c.png",//图片
-					// SortTitle: "45245",//副标题
-					// Title: "454"//标题
-				]
+					// "Id": "00000000000000",
+                    // "Title": "string",
+                    // "SortTitle": "string",
+                    // "ImgUrl": "string",
+                    // "ChildrenPrice": 0,
+                    // "AdultPrice": 0
+                ]
 			}
-		},
-		beforeRouteEnter(to,from,next){
-			if(from.name =="chanpinxiangqing"){//如果是从产品详情来的，将isback：true
-				to.meta.isBack=true
-			}
-			next()
-		},
-		created(){
-			this.productType =this.$route.params.type
-			// console.log(this.productType)
-			// console.log(this.$route.meta.isBack)
-			if(!this.$route.meta.isBack){//如果进入到该页面的是除了chanpinxiangqing 并且判断 是不是第一次进入的该页面
-				this.database = [];
-				this.gethometravelstrategy()
-			}
-				this.$route.meta.isBack = false
-			},
-		activated(){
-			
-			},
-		beforeRouteLeave(to,from,next){
-			if(to.name == "index"){
-				this.$route.meta.keepAlive =false//如果去到首页  不缓存本页面
-				this.$route.meta.isBack = false
-				
-			}else if(to.name == "chanpinxiangqing"){
-				this.$route.meta.keepAlive =true//否则  缓存本页面
-			
-			}
-			next()
-		},
+        },
+        created(){
+            //调用获取用户收藏列表方法
+            this.getlist()
+        },
 		methods: {
-		//接收参数，进行GET优惠特惠产品，查看更多也是用此接口，旅游攻略同样根据类别
-			gethometravelstrategy(){
-				let {productType,pageSize,pageIndex} = this;
-				this.upFinished = true;//先不加载
-				getHomeTravelStrategy(productType,pageIndex,pageSize).then(res=>{
-					// console.log(res)
-					if(res.data.type==1){
-						this.isUpLoading = true//开启加载提示
+            onClickLeft(){
+                this.$router.go(-1)
+            },
+            //获取用户收藏列表
+            getlist(){
+                let memberId = localStorage.UserId
+                let {pageIndex,pageSize} = this
+                	this.upFinished = true;//先不加载
+                getList(memberId,pageIndex,pageSize).then(res=>{
+                    console.log(res)
+                    if(res.data.type==1){
+                     this.isUpLoading = true//开启加载提示
 						this.upFinished = false;// 加载数据
 						this.database=this.database.concat(res.data.data.Rows)
 						if(this.database.length >0){this.isUpLoading = false}//数据请求回来关闭加载提示
@@ -102,21 +77,10 @@
 						}
 						this.pageIndex ++;
 					}
-				}).catch(err=>{
-					console.log(err)
-				})
-			},
-			// onLoadList() {
-			
-			// 		if(!this.hasmore){ //没有更多数据了
-			// 		this.isUpLoading = false;//关闭加载提示
-			// 		this.upFinished = true;//表示没有更多数据了
-			// 		return false;//阻止后续代码的请求
-            // }
-			// },
-			onClickLeft(){
-				this.$router.go(-1);
-			},
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }
 		
 		}
 	}

@@ -85,14 +85,16 @@
 		</div>
 		<!--第五栏-->
 		<div class="fifth-module">
-				<button class="tijiao">提交</button>
+				<button @click="clickme()" class="tijiao">提交</button>
 		</div>
 		
 	</div>
 </template>
 
 <script>
-	export default{
+	import {Postcall_back} from "@/api/Order"
+	import HomeNavbar from '../components/HomeNavbar'
+	export default{ 
 		data() {
 		    return {
 		    	radio: '1',
@@ -104,13 +106,26 @@
 		      	]
 		    }
 		  },
+	
 		  methods:{
 		    onSearch(){	
 		    },
 		    onClickLeft() {
-		      Toast('返回');
-		    },
-		  }
+		     this.$router.go(-1)
+			},
+		
+			clickme(){
+				this.postcallback()
+			},
+			//支付成功回调
+			postcallback(){
+				Postcall_back().then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+		}
 		
 	}
 </script>

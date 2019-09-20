@@ -1,122 +1,61 @@
 <template>
 	<div class="body">
-        <div class="title">
+        <!-- <div class="title">
             <div class="returnImg"><img :src="imgUrl1" alt=""></div>
-                <span class="back"  @click="onClickLeft">返回</span>
+                <span class="back"   @click-left="onClickLeft">返回</span>
             <span class="title-name">已完成</span>
-        </div>
+        </div> -->
+         <header>
+			<van-nav-bar
+			  title="已完成"
+			  left-text="返回"
+			  left-arrow
+			  @click-left="onClickLeft"
+			>
+			</van-nav-bar>
+		</header>
         <div class="line"></div>
+
         <div class="list-box">
             <div class="photo">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>
+                <img :src="imgUrl" alt="">
+            </div>
+            <div class="tour-text">
+                <span class="text1">国庆国内游</span><br>
+                <span class="text2">
+                    订单总价：
+                </span>
+                <span class="text3"><br>
+                    出行日期：2019.12.14
+                </span>
+                <span class="text4"><br>
+                    付款方式: 在线支付
+                </span>
         
-    </div>
-       <div class="small-line"></div>
-   
-    <!-- *********** -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
+            </div>
+            <div class="small-line"></div>
         </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>   
-    </div>
-      <div class="small-line"></div>
-    <!-- ************ -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>  
-    </div>
-       <div class="small-line"></div>
-    <!-- **************** -->
-    <div class="list-box">
-         <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div> 
-    </div>
-      <div class="small-line"></div>
-    <!-- *********** -->
-    <div class="list-box">
-        <div class="photo1">
-            <img :src="imgUrl" alt="">
-        </div>
-        <div class="tour-text">
-            <span class="text1">国庆国内游</span><br>
-            <span class="text2">
-                订单总价：
-            </span>
-            <span class="text3"><br>
-               出行日期：2019.12.14
-            </span>
-            <span class="text4"><br>
-              付款方式: 在线支付
-            </span>
-            <!-- <p class="text5">
-                失效
-            </p> -->
-        </div>  
-    </div>
- </div>
+
+         <!-- <div class="list-box">
+            <div class="photo">
+                <img :src="imgUrl" alt="">
+            </div>
+            <div class="tour-text">
+                <span class="text1">国庆国内游</span><br>
+                <span class="text2">
+                    订单总价：
+                </span>
+                <span class="text3"><br>
+                    出行日期：2019.12.14
+                </span>
+                <span class="text4"><br>
+                    付款方式: 在线支付
+                </span>
+        
+            </div>
+            <div class="small-line"></div>
+        </div> -->
+      </div>
 </template>
 
 <script>
@@ -139,9 +78,10 @@
 			this.$store.state.showTab = true;
 		},
 		methods: {
-			  onClickLeft(){
-				this.$router.go(-1)
-			}
+			onClickLeft(){
+              this.$router.go(-1)
+            }
+        
 			
 		}
 		
@@ -154,7 +94,7 @@
 	@import "../assets/css/index.styl" 
 	.body{
 		background: #fff;
-		padding-top: 0.45rem;
+		// padding-top: 0.45rem;
 		padding-bottom:0.7rem;
         overflow: hidden;
         
@@ -163,48 +103,51 @@
         margin :0;
         padding :0;
     }
-  .title {
-        width: 100%;
-		height: 0.45rem;
-		line-height: 0.45rem;
-		position: fixed;
-		top: 0;
-		left: 0;
-        background :#fff;
-    }
-    .title-name  {
-       position: relative;
-       z-index: 10;
-       display :block;
-       text-align :center;
-       line-height :0.45rem;
-       font-size :0.2rem;          
-    }
-    .title .returnImg {
-        width :0.2rem;
-        height :0.2rem;
-         position: absolute;
-       top: 0.04rem;
-       left: 0.1rem;
-       z-index: 10;
-       display :block;   
-    }
-    .title .returnImg img {
-        width :100%;
-        height :100%;
-    }
-    .back {
+//   .title {
+//         width: 100%;
+// 		height: 0.45rem;
+// 		line-height: 0.45rem;
+// 		position: fixed;
+// 		top: 0;
+// 		left: 0;
+//         background :#fff;
+//     }
+//     .title-name  {
+//        position: relative;
+//        z-index: 10;
+//        display :block;
+//        text-align :center;
+//        line-height :0.45rem;
+//        font-size :0.2rem;          
+//     }
+//     .title .returnImg {
+//         width :0.2rem;
+//         height :0.2rem;
+//          position: absolute;
+//        top: 0.04rem;
+//        left: 0.1rem;
+//        z-index: 10;
+//        display :block;   
+//     }
+//     .title .returnImg img {
+//         width :100%;
+//         height :100%;
+//     }
+//     .back {
       
-       position: absolute;
-       top: 0;
-       left: 0.3rem;
-       z-index: 10;
-       height :0.45rem;
-       display :block;
+//        position: absolute;
+//        top: 0;
+//        left: 0.3rem;
+//        z-index: 10;
+//        height :0.45rem;
+//        display :block;
        
-       line-height :0.45rem;
-       font-size :0.15rem;  
-    }
+//        line-height :0.45rem;
+//        font-size :0.15rem;  
+//     }
+.header {
+    background :#fff;
+}
     .line {
         width :100%;
         height :0.02rem;
@@ -213,7 +156,7 @@
     .list-box {
         width :100%;
         height:1.1rem;
-       
+        position:relative;
     }
     .photo {
         width :1.3rem;
@@ -308,6 +251,8 @@
          background :#f1f1f1;
         display:block;
         margin-left :0.08rem;
+        position:absolute;
+        bottom:0;
         
         
      }

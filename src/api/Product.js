@@ -30,10 +30,10 @@ export const Collection = (id) => {
     })
   }
 //获取用户收藏列表 GET /api/product/CollectionList
-export const getList = (member,pageIndex,pageSize) => {   
+export const getList = (memberId,pageIndex,pageSize) => {   
     return axios.request({
       url: 'product/CollectionList',
-      params: {member:member,'pageParameters.pageIndex':pageIndex,'pageParameters.pageSize':pageSize},
+      params: {memberId:memberId,'pageParameters.pageIndex':pageIndex,'pageParameters.pageSize':pageSize},
       method: 'get',
       headers:{'Authorize': localStorage.getItem('AccessToken') + '|' + localStorage.getItem('RefreshToken'),
       'Content-type': 'application/json'}

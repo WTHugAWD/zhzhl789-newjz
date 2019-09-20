@@ -452,8 +452,9 @@
 	}
 	
 	.remen {
-		padding: 0 0.1rem;
+		padding: 0 0.1rem 0.6rem;
 		border-top: 0.07rem solid #f1f1f1;
+
 	}
 	
 	.tuijian {

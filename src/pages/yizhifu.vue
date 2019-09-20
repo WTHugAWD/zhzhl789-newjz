@@ -2,7 +2,7 @@
 	<div class="container">
 		<header>
 			<van-nav-bar
-			  title="退款详情"
+			  title="订单详情"
 			  left-text="返回"
 			  left-arrow
 			  @click-left="onClickLeft"
@@ -16,35 +16,35 @@
 				<img src="../assets/img/picture-1.png" />
 			</div>
 			<div class="first-module-word">
-				<div class="word">订单编号：65847325945615463861</div>
-				<div class="word">订单金额：￥5642</div>
-				<div class="word">优惠抵扣：￥300</div>
-				<div class="word">下单时间：2019.06.08 12:00</div>
-				<div class="word">支付方式：在线支付</div>
+				<div class="word">订单编号：{{database.OrderNo}}</div>
+				<div class="word">订单金额：￥{{database.OrderPirce}}</div>
+				<div class="word">优惠抵扣：￥{{database.DeductionPrice}}</div>
+				<div class="word">下单时间：{{database.OrderTime}}</div>
+				<div class="word">支付方式：{{database.PaymentType}}</div>
 			</div>
 		</div>
 		<!--第二模块-->
 		<div class="second-module">
 			<div class="second-module-title">产品信息</div>
 			<div class="second-module-ticket">
-				<div class="guoqing">国庆国内游</div>
+				<div class="guoqing">{{database.ProductName}}</div>
 				<div class="price">
 					<van-row>
-					  <van-col span="8">成人票：1位</van-col>
-					  <van-col span="14">成人价：3688/人</van-col>
+					  <van-col span="8">成人票：{{database.AdultNum}}位</van-col>
+					  <van-col span="14">成人价：{{database.AdultPrice}}/人</van-col>
 					</van-row>
 					<van-row>
-					  <van-col span="8">儿童票：1位</van-col>
-					  <van-col span="14">儿童价：1688/人</van-col>
+					  <van-col span="8">儿童票：{{database.ChildrenNum}}位</van-col>
+					  <van-col span="14">儿童价：{{database.ChildrenPrice}}/人</van-col>
 					</van-row>	
 				</div>	
 			</div>
 			<div class="second-module-information">
 				<div class="information-title">联系人信息</div>
 				<div class="name-liuyan">
-					<div>姓名：里打碎</div>
-					<div>手机号：15698756589</div>
-					<div>出行留言：你说你说你说你说我不着调</div>
+					<div>姓名：{{database.Name}}</div>
+					<div>手机号：{{database.Phone}}</div>
+					<div>出行留言：{{database.Message}}</div>
 				</div>
 			</div>
 		</div>
@@ -52,7 +52,9 @@
 </template>
 
 <script>
-	export default{
+	import {getOrderInfo} from "@/api/Order"
+ 	export default {
+		 name:"yizhifu",
 		data() {
 		    return {
 		    	radio: '1',
@@ -61,15 +63,33 @@
 		      	images: [
 			        'https://img.yzcdn.cn/vant/apple-1.jpg',
 			        'https://img.yzcdn.cn/vant/apple-2.jpg'
-		      	]
+				  ],
+				  database:[]
 		    }
+		  },
+		  created(){
+			  console.log(this.$route.params.type)
+			  this.getorderinfo()
 		  },
 		  methods:{
 		    onSearch(){	
 		    },
 		    onClickLeft() {
-		      Toast('返回');
-		    },
+		     this.$router.go(-1)
+			},
+			getorderinfo(){
+				let orderId = this.$route.params.type
+				let memberId = localStorage.UserId
+				getOrderInfo(orderId,memberId).then(res=>{
+					console.log(res)
+					if(res.data.type == 1){
+						this.database = res.data.data
+					}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			
 		  }
 		
 	} 

@@ -29,7 +29,7 @@
 					  		<img class="phone-tu" src="../assets/img/phone .png" />
 					  	</div>
 					  	<div class="phone">
-					  		<a href="tel:13520660170" style="color: #000;">电话</a>
+					  		<a :href="database.Phone" style="color: #000;">电话</a>
 					  	</div>
 			    	</div>
 			    </van-col>
